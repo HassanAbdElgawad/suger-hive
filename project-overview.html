@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SugarHive - Frontend/Backend Overview</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        background: #f7f7f8;
+        color: #1f2937;
+        margin: 0;
+        line-height: 1.8;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 32px auto;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 28px;
+      }
+      h1, h2, h3 {
+        margin-top: 0;
+        color: #111827;
+      }
+      h2 {
+        margin-top: 28px;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 8px;
+      }
+      .box {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin: 12px 0;
+      }
+      ul {
+        margin: 8px 0 0;
+      }
+      li {
+        margin: 6px 0;
+      }
+      .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid #d1d5db;
+        background: #f3f4f6;
+      }
+      .note {
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #7c2d12;
+        border-radius: 10px;
+        padding: 12px 14px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0;
+        background: #fff;
+      }
+      th, td {
+        border: 1px solid #e5e7eb;
+        padding: 10px;
+        text-align: right;
+        vertical-align: top;
+      }
+      th {
+        background: #f3f4f6;
+      }
+      code {
+        direction: ltr;
+        display: inline-block;
+        background: #f3f4f6;
+        padding: 1px 6px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>ملخص مشروع SugarHive (الحالة الحالية)</h1>
+      <p>
+        هذا الملخص يشرح باختصار الـ Frontend والـ Backend الموجودين حالياً، ثم يوضح ما يجب تنفيذه في
+        الـ Backend حتى يصبح الربط بين الطرفين كاملاً وديناميكياً.
+      </p>
+
+      <h2>عدد الموديولات الحالية</h2>
+      <div class="box">
+        <ul>
+          <li><strong>إجمالي الموديولات الوظيفية الأساسية: 9 موديولات</strong></li>
+          <li>Dashboard</li>
+          <li>Checklists</li>
+          <li>Training</li>
+          <li>Branches</li>
+          <li>Team</li>
+          <li>Settings</li>
+          <li>Reports (Daily + Branch Comparison)</li>
+          <li>Inbox</li>
+          <li>Authentication (Login/Register)</li>
+        </ul>
+      </div>
+      <div class="box">
+        <ul>
+          <li><strong>معلومة إضافية:</strong> عند العدّ على مستوى ملفات الصفحات داخل <code>client/src/pages</code> فعددها الحالي 14 صفحة (يشمل صفحات التفاصيل وصفحة 404).</li>
+        </ul>
+      </div>
+
+      <h2>1) Frontend الحالي</h2>
+      <div class="box">
+        <span class="badge">التقنيات</span>
+        <ul>
+          <li>React + TypeScript + Vite</li>
+          <li>Wouter للـ Routing</li>
+          <li>TanStack Query موجود ومهيأ للاستهلاك من API</li>
+          <li>UI Components كثيرة جاهزة داخل <code>client/src/components/ui</code></li>
+        </ul>
+      </div>
+      <div class="box">
+        <span class="badge">المنطق الحالي</span>
+        <ul>
+          <li>يوجد نظام حماية صفحات (ProtectedRoute) مبني على الدور والصلاحيات.</li>
+          <li>Authentication الحالي يعمل من المتصفح مباشرة عبر LocalStorage (Mock).</li>
+          <li>دعوات التسجيل (Invites) والمستخدمون يتم حفظهم محلياً داخل المتصفح.</li>
+          <li>جزء من البيانات ما يزال Static/Mock وليس من API حقيقي.</li>
+        </ul>
+      </div>
+
+      <h2>2) Backend الحالي</h2>
+      <div class="box">
+        <span class="badge">التقنيات</span>
+        <ul>
+          <li>Node.js + Express + TypeScript</li>
+          <li>هيكل يدعم HTTP Server وتكامل Vite في وضع التطوير</li>
+          <li>Drizzle موجود في المشروع مع إعداد PostgreSQL</li>
+        </ul>
+      </div>
+      <div class="box">
+        <span class="badge">الحالة الفعلية</span>
+        <ul>
+          <li>الـ API الحالي شبه محدود (Endpoint واحد لتحميل ملفات BRD/User Stories).</li>
+          <li>لا يوجد حتى الآن CRUD APIs كاملة للصفحات الأساسية (Team, Branches, Checklists...).</li>
+          <li>الـ storage الحالي في الذاكرة (MemStorage) وليس قاعدة بيانات فعلية.</li>
+          <li>Schema الحالي بسيط جداً (جدول users فقط).</li>
+        </ul>
+      </div>
+
+      <h2>3) ماذا نحتاج في الـ Backend لربط كامل وديناميكي؟</h2>
+      <div class="note">
+        الفكرة الأساسية: نقل البيانات والمنطق من LocalStorage/Mock إلى API + Database، ثم استهلاكها في
+        Frontend عبر React Query.
+      </div>
+
+      <h3>المرحلة A — تأسيس الداتا الفعلية</h3>
+      <ul>
+        <li>توسيع قاعدة البيانات (Drizzle schema) لتشمل: users, branches, invites, team_members, checklists, checklist_items, reports, messages.</li>
+        <li>إضافة migrations وتشغيلها على PostgreSQL.</li>
+        <li>إنشاء طبقة Repository/Service بدل التخزين في الذاكرة.</li>
+      </ul>
+
+      <h3>المرحلة B — API حقيقي لكل وحدة</h3>
+      <ul>
+        <li>Auth APIs: <code>POST /api/auth/login</code>, <code>POST /api/auth/register</code>, <code>POST /api/auth/logout</code>, <code>GET /api/auth/me</code>.</li>
+        <li>Invites APIs: إنشاء دعوة، التحقق منها، وتعليمها كمستخدمة.</li>
+        <li>CRUD APIs للفروع، الفريق، الشيك ليست، التقارير، الرسائل.</li>
+        <li>توحيد صيغة الاستجابات والأخطاء (success/error + message + data).</li>
+      </ul>
+
+      <h3>المرحلة C — الأمان والصلاحيات</h3>
+      <ul>
+        <li>تفعيل Session أو JWT مع حفظ آمن لكلمة المرور (hashing مثل bcrypt).</li>
+        <li>Middleware للتحقق من المستخدم الحالي والصلاحيات حسب الدور.</li>
+        <li>عدم الاعتماد على التحقق في الـ Frontend فقط؛ الـ Backend يجب أن يمنع الوصول غير المصرح.</li>
+      </ul>
+
+      <h3>المرحلة D — ربط Frontend فعلياً</h3>
+      <ul>
+        <li>استبدال LocalStorage في auth/data hooks بنداءات API فعلية.</li>
+        <li>استخدام React Query لكل Queries/Mutations مع cache invalidation.</li>
+        <li>إضافة حالات loading/error لكل شاشة لضمان UX صحيح.</li>
+      </ul>
+
+      <h3>المرحلة E — الديناميكية الكاملة (Realtime + تشغيل فعلي)</h3>
+      <ul>
+        <li>للـ Inbox/Notifications: WebSocket أو SSE للتحديث اللحظي.</li>
+        <li>إضافة Pagination/Filtering/Sorting في Endpoints الرئيسية.</li>
+        <li>Audit logs للأحداث المهمة (إنشاء دعوة، تعديل بيانات، إغلاق checklist).</li>
+      </ul>
+
+      <h2>4) تعريف "الربط الكامل" بشكل عملي</h2>
+      <div class="box">
+        <ul>
+          <li>أي تحديث في الواجهة يُكتب في قاعدة البيانات عبر API.</li>
+          <li>أي Refresh للصفحة يعرض نفس البيانات لأنها محفوظة Server-side.</li>
+          <li>الصلاحيات تُطبق في الـ Backend وليس فقط في الـ Frontend.</li>
+          <li>يمكن تشغيل النظام على أكثر من جهاز بنفس البيانات بدون اعتماد على LocalStorage.</li>
+        </ul>
+      </div>
+
+      <h2>5) أول 3 خطوات تنفيذية مقترحة الآن</h2>
+      <ol>
+        <li>تنفيذ Auth backend كامل وربط <code>login/register/me/logout</code> في الواجهة.</li>
+        <li>تنفيذ Branches + Team APIs (CRUD) ثم تحويل صفحاتهما من Mock إلى API.</li>
+        <li>تنفيذ Checklists APIs وربط لوحة التحكم/التقارير تدريجياً.</li>
+      </ol>
+
+      <h2>6) تفصيل Backend المطلوب (أعمق + قابل للتقدير)</h2>
+      <div class="box">
+        <span class="badge">افتراضات التقدير</span>
+        <ul>
+          <li>الفريق: 2 Developers (خبرتهم الأساسية Frontend) + دعم AI في التكويد والاختبارات.</li>
+          <li>الهدف: ربط Dynamic كامل مع قاعدة بيانات SQL Server.</li>
+          <li>التقديرات تشمل التطوير + اختبار + إصلاحات أولية، ولا تشمل تغييرات جذرية في UI.</li>
+        </ul>
+      </div>
+
+      <h3>A) تصميم البيانات (SQL Server)</h3>
+      <ul>
+        <li>تعريف الجداول الأساسية: users, roles, branches, invites, team_members, checklists, checklist_items, reports, inbox_messages, notifications, audit_logs.</li>
+        <li>تحديد العلاقات والمفاتيح (FK) + الفهارس (Indexes) حسب الاستعلامات المتوقعة.</li>
+        <li>إضافة حقول تتبع أساسية في كل جدول: created_at, updated_at, created_by, updated_by.</li>
+      </ul>
+
+      <h3>B) طبقة الهوية والصلاحيات</h3>
+      <ul>
+        <li>Auth APIs: login/register/logout/me.</li>
+        <li>تشفير كلمات المرور (bcrypt/argon2).</li>
+        <li>RBAC واضح حسب الأدوار الحالية: admin, manager, supervisor, employee.</li>
+        <li>Middleware موحد للتحقق من الجلسة/التوكن + الصلاحيات لكل Endpoint.</li>
+      </ul>
+
+      <h3>C) نطاق APIs لكل Module</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th>الـ Endpoints الأساسية</th>
+            <th>ملاحظات Backend</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Authentication</td>
+            <td>POST /auth/login, POST /auth/register, POST /auth/logout, GET /auth/me</td>
+            <td>أساس كل النظام + إدارة Session/JWT</td>
+          </tr>
+          <tr>
+            <td>Branches</td>
+            <td>GET/POST /branches, GET/PATCH/DELETE /branches/:id</td>
+            <td>صلاحيات أعلى للمشرفين/المديرين</td>
+          </tr>
+          <tr>
+            <td>Team</td>
+            <td>GET/POST /team, GET/PATCH /team/:id, POST /invites</td>
+            <td>ربط العضو بالفرع والدور + lifecycle للدعوات</td>
+          </tr>
+          <tr>
+            <td>Checklists</td>
+            <td>GET/POST /checklists, GET/PATCH /checklists/:id, POST /checklists/:id/items</td>
+            <td>حساب progress وتواريخ الاستحقاق</td>
+          </tr>
+          <tr>
+            <td>Reports</td>
+            <td>GET /reports/daily, GET /reports/branches</td>
+            <td>تجميعات SQL + فلاتر زمنية</td>
+          </tr>
+          <tr>
+            <td>Inbox/Notifications</td>
+            <td>GET /messages, POST /messages, GET /notifications</td>
+            <td>Realtime لاحقاً عبر SSE أو WebSocket</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>D) جودة وتشغيل</h3>
+      <ul>
+        <li>Validation لكل Request/Response (Zod أو Joi).</li>
+        <li>Global error handler + شكل Error موحد.</li>
+        <li>Logging + Audit logs للأحداث الحساسة.</li>
+        <li>Smoke tests وIntegration tests للمسارات الحرجة.</li>
+      </ul>
+
+      <h2>7) التحويل من PostgreSQL إلى Microsoft SQL Server</h2>
+      <div class="note">
+        الوضع الحالي بالمشروع مضبوط على Drizzle + PostgreSQL. بما أن القرار النهائي هو SQL Server، يلزم تعديل طبقة الـ ORM/Migrations بشكل صريح.
+      </div>
+      <ul>
+        <li>الخطوة 1: تثبيت Driver واتفاق على ORM يدعم SQL Server بشكل مباشر.</li>
+        <li>الخطوة 2: نقل Schema الحالي إلى SQL Server Schema (مع أنواع البيانات المناسبة).</li>
+        <li>الخطوة 3: إنشاء Migrations جديدة خاصة بـ SQL Server.</li>
+        <li>الخطوة 4: تحديث Repository/Queries وبيئة التشغيل (connection string, pooling, timeouts).</li>
+        <li>الخطوة 5: إعادة اختبار جميع Endpoints على SQL Server فعلياً.</li>
+      </ul>
+      <div class="box">
+        <span class="badge">توصية عملية للفريق الحالي</span>
+        <ul>
+          <li>للسرعة مع فريق Frontend + AI: استخدام ORM ناضج بدعم SQL Server قوي (مثل Prisma) غالباً يقلل التعقيد وزمن التعلم.</li>
+          <li>إن أردتم إبقاء الأسلوب أقرب للـ SQL/Type-safe query builder: يمكن اعتماد بديل يدعم SQL Server بشكل واضح، لكن قد يزيد جهد الضبط.</li>
+        </ul>
+      </div>
+
+      <h2>8) مقارنة Express.js vs Hono.js (في حالتكم الحالية)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>البند</th>
+            <th>Express.js</th>
+            <th>Hono.js</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>الوضع الحالي للمشروع</td>
+            <td>مستخدم بالفعل (أقل مخاطرة)</td>
+            <td>يتطلب إعادة هيكلة جزئية للمسارات والـ middleware</td>
+          </tr>
+          <tr>
+            <td>منحنى التعلم لفريق Frontend</td>
+            <td>أسهل بسبب الانتشار والدروس الكثيرة</td>
+            <td>سهل أيضاً لكن أقل أمثلة في نفس Stack الحالي</td>
+          </tr>
+          <tr>
+            <td>الأداء</td>
+            <td>جيد جداً لمعظم تطبيقات الأعمال</td>
+            <td>خفيف وسريع جداً خصوصاً في البيئات Edge</td>
+          </tr>
+          <tr>
+            <td>الاستقرار والـ Ecosystem</td>
+            <td>ناضج جداً ومكتبات ضخمة</td>
+            <td>حديث أكثر وEcosystem أصغر نسبياً</td>
+          </tr>
+          <tr>
+            <td>الوقت للوصول للإنتاج الآن</td>
+            <td>أسرع (Keep current stack)</td>
+            <td>أبطأ قليلاً بسبب التحويل</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="box">
+        <strong>الترشيح العملي لمشروعكم الآن:</strong>
+        <ul>
+          <li>استمرار على Express.js حتى إنهاء الربط الكامل بسرعة.</li>
+          <li>إعادة تقييم Hono لاحقاً فقط إذا ظهرت حاجة Edge deployment أو أداء أعلى جداً مع حمل كبير.</li>
+        </ul>
+      </div>
+
+      <h2>9) Timeline مقترح (2 Developers + AI)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المرحلة</th>
+            <th>النطاق</th>
+            <th>المدة التقديرية</th>
+            <th>المخرجات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Phase 0</td>
+            <td>قرار التقنية (Express مستمر + SQL Server + ORM) وتهيئة البيئة</td>
+            <td>2-3 أيام</td>
+            <td>Repo/Config جاهز + اتصال DB ناجح</td>
+          </tr>
+          <tr>
+            <td>Phase 1</td>
+            <td>Schema + Migrations + Seed أساسي</td>
+            <td>4-6 أيام</td>
+            <td>قاعدة بيانات مستقرة + جداول أساسية</td>
+          </tr>
+          <tr>
+            <td>Phase 2</td>
+            <td>Auth + RBAC + Users/Invites APIs</td>
+            <td>5-7 أيام</td>
+            <td>تسجيل/دخول/جلسات + صلاحيات عاملة</td>
+          </tr>
+          <tr>
+            <td>Phase 3</td>
+            <td>Branches + Team APIs + ربط الواجهة</td>
+            <td>5-8 أيام</td>
+            <td>شاشتان رئيسيتان Dynamic بالكامل</td>
+          </tr>
+          <tr>
+            <td>Phase 4</td>
+            <td>Checklists + Reports APIs + ربط الواجهة</td>
+            <td>7-10 أيام</td>
+            <td>عمليات التشغيل الأساسية + تقارير</td>
+          </tr>
+          <tr>
+            <td>Phase 5</td>
+            <td>Inbox/Notifications + تحسينات Realtime أولية</td>
+            <td>4-7 أيام</td>
+            <td>تحديثات ديناميكية أفضل</td>
+          </tr>
+          <tr>
+            <td>Phase 6</td>
+            <td>اختبارات تكامل + Hardening + UAT</td>
+            <td>4-6 أيام</td>
+            <td>نسخة شبه إنتاجية مستقرة</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="note">
+        إجمالي تقدير واقعي: من 6 إلى 9 أسابيع تقريباً (بحسب سرعة التعلم في Backend، ومستوى التعقيد النهائي للتقارير والـ Realtime).
+      </div>
+
+      <h2>10) كيف نستخدم AI لتقليل الوقت؟</h2>
+      <ul>
+        <li>توليد Skeleton للـ routes/controllers/services لكل Module.</li>
+        <li>توليد Zod schemas وDTOs وtypes تلقائياً من النموذج.</li>
+        <li>توليد Integration tests للـ happy/error paths.</li>
+        <li>تسريع كتابة SQL queries للتقارير مع مراجعة بشرية.</li>
+        <li>إجراء Code review سريع (Security + validation + edge cases) قبل الدمج.</li>
+      </ul>
+
+      <p><strong>الخلاصة:</strong> الواجهة جاهزة إلى حد كبير، لكن الربط الديناميكي الكامل يتطلب Backend أوسع (DB schema + APIs + auth/authorization + realtime) ثم استبدال مصادر البيانات المحلية في الواجهة بنداءات API.</p>
+    </div>
+  </body>
+</html>
